@@ -1,0 +1,21 @@
+name: taskName
+description: taskDescription
+source: https://github.com/jfrog/jfrog-pipelines-task
+labels:
+  - task
+  - template
+input:
+  - name: inputName
+    description: input description
+output:
+  - name: status
+    description: status message of the task
+execution:
+  - bin/taskName-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
+hooks:
+  onStepSuccess:
+    - echo "injecting from task into step onSuccess"
+  onStepFailure:
+    - echo "injecting from task into step onFailure"
+  onStepComplete:
+    - echo "injecting from task into step onComplete"
