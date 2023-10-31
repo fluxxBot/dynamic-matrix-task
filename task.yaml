@@ -1,21 +1,33 @@
-name: taskName
-description: taskDescription
+name: add_dynamic_steplets
+description: this task will add dynamic steplets to Dynamic Steps
 source: https://github.com/jfrog/jfrog-pipelines-task
 labels:
   - task
   - template
+  - dynamic
+  - steplets
+  - steps
 input:
-  - name: inputName
-    description: input description
+  - name: environment_variables
+    description: optional input variable to create steplet multipliers using environment variables
+
+  - name: nodePools
+    description: optional input variable to create steplet multipliers using nodePools variables
+
+  - name: runtimes
+    description: optional input variable to create steplet multipliers using runtimes variables
+
+  - name: step_names
+    description: Required input of comma separated step names for which steplets are to be created
 output:
-  - name: status
-    description: status message of the task
+  - name: steplets
+    description: created steplets as part of the task
 execution:
-  - bin/taskName-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
+  - bin/add_dynamic_steplets-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
 hooks:
   onStepSuccess:
-    - echo "injecting from task into step onSuccess"
+    - echo "Dynamic steplets created successfully for the given step"
   onStepFailure:
-    - echo "injecting from task into step onFailure"
+    - echo "Failed creating dynamic steplets for the given step"
   onStepComplete:
     - echo "injecting from task into step onComplete"

@@ -2,6 +2,8 @@ module jfrog-pipelines-go-task
 
 go 1.20
 
+require golang.org/x/exp v0.0.0-20231006140011-7918f672742d
+
 require (
 	github.com/jfrog/jfrog-pipelines-tasks-sdk-go v0.0.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -11,6 +13,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
 	golang.org/x/crypto v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.4.0 // indirect
 )
