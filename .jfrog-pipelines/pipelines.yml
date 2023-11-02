@@ -38,7 +38,7 @@ pipelines:
               id: my-awesome-task
               input:
                 step_names: 'step_1,step_2'
-                environment_variables: "{'key1:test1, key2:test2'}"
+                environment_variables: "{\"key1\":\"value1\",\"key2\":\"value2\"}"
           onFailure:
             - echo "Task Test failed"
           onSuccess:
