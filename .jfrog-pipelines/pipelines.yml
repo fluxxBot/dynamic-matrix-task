@@ -33,6 +33,7 @@ pipelines:
           onStart:
             - echo "Starting execution on {{ .Values.taskName }}"
           onExecute:
+            - echo "Starting onExecute"
             - task: $res_{{ .Values.primaryResource }}_resourcePath
               id: my-awesome-task
               input:
