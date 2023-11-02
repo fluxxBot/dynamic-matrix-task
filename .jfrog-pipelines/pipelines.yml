@@ -41,6 +41,9 @@ pipelines:
           onExecute:
             - echo "Starting onExecute"
             - pushd $res_{{ .Values.primaryResource }}_resourcePath
+            - export GOPROXY="https://${int_{{ .Values.artIntegration }}_user}:${int_{{ .Values.artIntegration }}_apikey}@entplus.jfrog.io/artifactory/api/go/pipe-go-tasks-virtual"
+            - export GONOSUMDB="github.com/jfrog/*"
+            - go get .
             - make do-all
             - popd
             - task: $res_{{ .Values.primaryResource }}_resourcePath
