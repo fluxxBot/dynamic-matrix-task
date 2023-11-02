@@ -34,6 +34,9 @@ pipelines:
             - echo "Starting execution on {{ .Values.taskName }}"
           onExecute:
             - echo "Starting onExecute"
+            - pushd $res_{{ .Values.primaryResource }}_resourcePath
+            - make do-all
+            - popd
             - task: $res_{{ .Values.primaryResource }}_resourcePath
               id: my-awesome-task
               input:
