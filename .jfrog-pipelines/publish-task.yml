@@ -58,7 +58,7 @@ pipelines:
           inputSteps:
             - name: build_and_publish_task
           integrations:
-            - name: {{ .Values.artIntegration }}
+            - name: {{ .Values.artifactory }}
         execution:
           onExecute:
             # Run task
