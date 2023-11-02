@@ -1,5 +1,5 @@
 taskName: create_steplets
-primaryResource: 
+primaryResource: primary_test_resource
 gitProvider: int_github
 artifactory: int_artifactory # rename if the artifactory integration is different
 repoPath: fluxxBot/dynamic-matrix-task
