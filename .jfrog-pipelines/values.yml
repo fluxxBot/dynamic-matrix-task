@@ -1,9 +1,9 @@
-taskName: create_dynamic_steplets
-primaryResource:
+taskName: create_steplets
+primaryResource: 
 gitProvider: int_github
 artifactory: int_artifactory # rename if the artifactory integration is different
-repoPath:
+repoPath: fluxxBot/dynamic-matrix-task
 mainBranch: main
 protocol: https
 buildOnCommit: true
-pipelineName:
+pipelineName: test_create_steplets

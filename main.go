@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -33,11 +32,6 @@ var (
 	readInput = tasks.GetInput
 )
 
-func haltExecution(errMessage string) {
-	tasks.Error(errMessage)
-	os.Exit(1)
-}
-
 func main() {
 	tasks.Info("Starting task ...")
 	status := "success"
@@ -45,39 +39,48 @@ func main() {
 
 	r := new(AddDynamicSteplets)
 	r.readInputs()
-	r.createSteplets()
+	err := r.createSteplets()
+
+	if err != nil {
+		haltExecution(err.Error())
+	}
 
 	tasks.SetOutput("status", status)
 }
 
 func (r *AddDynamicSteplets) readInputs() {
-	// Fetch inputs
+	// Fetch and sanitize inputs
+	currentStepName := getValue("step_name")
 	i := Input{}
+
+	//reading stepNames for which steplets needs to be added
 	inputStepNames := readInput("step_names")
 	if len(inputStepNames) == 0 {
-		tasks.Error("Enter step names for which steplets are to be created")
-		return
+		haltExecution("Enter step names for which steplets are to be created")
 	}
 	i.step_names = strings.Split(inputStepNames, ",")
+	isSameStep := slices.Contains(i.step_names, currentStepName)
+	if(isSameStep) {
+		haltExecution("cannot add steplets for the same step")
+	}
 
+	//reading environment variables for stepletMultiplier
 	inputEnvironmentVariables := readInput("environment_variables")
 	if len(inputEnvironmentVariables) == 0 {
 		return
 	}
 	err := json.Unmarshal([]byte(inputEnvironmentVariables), &i.environment_variable)
 	if err != nil {
-		tasks.Error("Failed to parse Environment Variables input")
-		return
+		haltExecution("Failed to parse Environment Variables input")
 	}
 
 	inputNodePoolsVariables := readInput("nodePools")
 	if len(inputEnvironmentVariables) == 0 {
 		return
 	}
-	err = json.Unmarshal([]byte(inputNodePoolsVariables), &i.nodePools)
+	i.nodePools = strings.Split(inputNodePoolsVariables, ",")
 	if err != nil {
-		tasks.Error("Failed to parse nodePools input")
-		return
+		haltExecution("Failed to parse nodePools input")
 	}
 
 	inputRuntimes := readInput("runtimes")
@@ -86,8 +89,7 @@ func (r *AddDynamicSteplets) readInputs() {
 	}
 	err = json.Unmarshal([]byte(inputRuntimes), &i.runtimes)
 	if err != nil {
-		tasks.Error("Failed to parse runtimes input")
-		return
+		haltExecution("Failed to parse runtimes input")
 	}
 
 	r.inputs = i
@@ -100,11 +102,6 @@ func (r *AddDynamicSteplets) createSteplets() error {
 	step_name := getValue("step_name")
 	apiToken := getValue("builder_api_token")
 	pipelinesURL := getValue("pipelines_api_url")
-
-	inputStepName := r.inputs.step_names
-	if slices.Contains(inputStepName, step_name) {
-		return errors.New("cannot create steplets for same step")
-	}
 
 	tasks.Info("RunId :- "+runId, "apiToken:-"+apiToken)
 	req, err := http.NewRequest("Body", pipelinesURL+"/steps/"+step_name+"/"+runId+"/add_matrix_steplets", r.inputs)
@@ -124,6 +121,11 @@ func (r *AddDynamicSteplets) createSteplets() error {
 	}
 	tasks.Info(content)
 	return nil
+}
+
+func haltExecution(errMessage string) {
+	tasks.Error(errMessage)
+	os.Exit(1)
 }
 
 // getValue is a wrapper for tasks.GetVariable by handling error in case variable is not available

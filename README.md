@@ -1,13 +1,12 @@
 # Jfrog-Pipelines-Task
 
-This JFrog pipelines task performs this action.
+This JFrog pipelines task creates steplets during runtime for a matrix step.
  
 this task performs below actions
 
-- Does some awesome work
-- Installation of a popular package
-- Performs some repetitive tasks
-- Sends notification
+- Gets input for the required configuration
+- Sanitizes the input
+- Makes api call for the given configuration
 
 ### What's New
 
