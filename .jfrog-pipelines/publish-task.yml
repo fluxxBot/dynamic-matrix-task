@@ -1,17 +1,17 @@
 template: true
 valuesFilePath: ./values.yml
 
-resources:
-  - name: {{ .Values.primaryResource }}
-    type: GitRepo
-    configuration:
-      path: {{ .Values.repoPath }}
-      gitProvider: {{ .Values.gitProvider }}
-      branches:
-        include: ^{{ .Values.mainBranch }}$
-      cloneProtocol: {{ .Values.protocol }}
-      buildOn:
-        commit: {{ .Values.publishOnCommit }}
+# resources:
+#   - name: {{ .Values.primaryResource }}
+#     type: GitRepo
+#     configuration:
+#       path: {{ .Values.repoPath }}
+#       gitProvider: {{ .Values.gitProvider }}
+#       branches:
+#         include: ^{{ .Values.mainBranch }}$
+#       cloneProtocol: {{ .Values.protocol }}
+#       buildOn:
+#         commit: {{ .Values.publishOnCommit }}
 
 pipelines:
   - name: {{ .Values.pipelineName }}_publish
